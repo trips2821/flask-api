@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    machine: 
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Building flask-api
+          command: |
+            docker build -t flask-api -f ./api/Dockerfile .
+            docker tag flask-api repo-goes-here/flask-api:$CIRCLE_BUILD_NUM
+            docker tag flask-api repo-goes-here/flask-api:latest
+
+      - run:
+          name: Logging into AWS
+          command: $(aws ecr get-login --no-include-email --region <region-goes-here>)
+
+      - run:
+          name: Pushing flash-api container
+          command: |
+            docker push repo-goes-here/flask-api
