@@ -8,7 +8,7 @@ from libs.base import *
 from models import User
 
 
-#auth function
+#Auth function
 @auth.verify_password
 def verify_password(username_or_token, password):
     # first try to authenticate by token
@@ -60,7 +60,7 @@ def get_auth_token():
     return jsonify({'token': token.decode('ascii'), 'duration': token_exp}), 200
 
 
-#must be logged in for this to work
+#Must be logged in for this to work
 @app.route('/api/test', methods=['GET'])
 @auth.login_required
 def test():
